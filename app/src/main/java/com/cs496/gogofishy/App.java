@@ -1,6 +1,8 @@
 package com.cs496.gogofishy;
 
 import android.app.Application;
+import android.provider.Settings;
+import android.util.Log;
 
 import java.io.IOException;
 
@@ -16,5 +18,6 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
     }
 }

@@ -14,12 +14,20 @@
         android:scaleType="centerCrop" />
 
     <Button
-        android:text="Button"
+        android:text="StartService"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:id="@+id/start_button"
         android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:text="StopService"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/start_button"
         android:layout_alignParentEnd="true"
-        android:id="@+id/button" />
+        android:id="@+id/stop_button" />
 
 
 </RelativeLayout>

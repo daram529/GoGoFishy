@@ -53,10 +53,17 @@ public class SoundMeter {
 
     public double getAmplitude() {
         if (mRecorder != null)
-            return  (mRecorder.getMaxAmplitude()/2700.0);
+            return  (mRecorder.getMaxAmplitude());
         else
             return 0;
+    }
 
+    public double getDecibel() {
+        if (mRecorder != null)
+            return (20* Math.log10((double)mRecorder.getMaxAmplitude()));
+
+        else
+            return 0;
     }
 
     public double getAmplitudeEMA() {

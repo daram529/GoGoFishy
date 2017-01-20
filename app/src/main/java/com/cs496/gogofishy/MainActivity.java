@@ -1,5 +1,6 @@
 package com.cs496.gogofishy;
 
+import android.app.ActivityManager;
 import android.graphics.drawable.Drawable;
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -10,6 +11,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.provider.Settings;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v7.app.AppCompatActivity;
@@ -28,13 +30,13 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.cs496.gogofishy.service.SensorService;
+
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    SensorManager sm;
-    NotificationManager nm;
-    PendingIntent pendingIntent;
+    Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +51,33 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        sm = (SensorManager)getSystemService(SENSOR_SERVICE);
+        intent=new Intent(this, SensorService.class);
+
+        Button startButton = (Button)findViewById(R.id.start_button);
+        startButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startService(intent);
+                Log.d("activity", "button clicked");
+            }
+        });
+
+        Button stopButton = (Button)findViewById(R.id.stop_button);
+        stopButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v){
+                stopService(intent);
+                Log.d("stop", "button clicked");
+            }
+        });
+
+    }
+
+
+}
+
+
+
 
 //        List<Sensor> sensors = sm.getSensorList(Sensor.TYPE_ALL);
 //        for (Sensor sensor : sensors)
@@ -60,59 +88,3 @@ public class MainActivity extends AppCompatActivity {
 //                Log.e("Sensor found", sensor.getName());
 //            }
 //        }
-
-
-        Sensor light = sm.getDefaultSensor(Sensor.TYPE_LIGHT);
-        sm.registerListener(sensorListener, light, 10000000);
-
-
-        Button button = (Button)findViewById(R.id.button);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                sm.unregisterListener(sensorListener);
-            }
-        });
-    }
-
-
-    public SensorEventListener sensorListener = new SensorEventListener() {
-        @Override
-        public void onSensorChanged(SensorEvent event) {
-//            sensorType.setText(event.sensor.getType());
-//            sensorValue.setText(event.values[0]+"");
-//            if (event.sensor.getType() == Sensor.TYPE_PROXIMITY){
-//                if (event.values[0] <1){
-//                    Log.i("too close", "aha");
-//                }
-//            }
-            if (event.sensor.getType() == Sensor.TYPE_LIGHT){
-                Log.i("value", event.values[0] + "lux");
-                if (event.values[0] < 200){
-                    NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                    PendingIntent pendingIntent = PendingIntent.getActivity(getBaseContext(), 0, new Intent(getBaseContext(), MainActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
-
-                    Notification.Builder mBuilder = new Notification.Builder(getBaseContext());
-                    mBuilder.setSmallIcon(R.drawable.ic_shark);
-                    mBuilder.setTicker("Notification.Builder");
-                    mBuilder.setWhen(System.currentTimeMillis());
-                    mBuilder.setNumber(10);
-                    mBuilder.setContentTitle("Notification.Builder Title");
-                    mBuilder.setContentText("Notification.Builder Massage");
-                    mBuilder.setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE);
-                    mBuilder.setContentIntent(pendingIntent);
-                    mBuilder.setAutoCancel(true);
-                    mBuilder.setPriority(Notification.PRIORITY_MAX);
-
-                    nm.notify(111, mBuilder.build());
-                }
-            }
-        }
-
-        @Override
-        public void onAccuracyChanged(Sensor sensor, int accuracy) {
-
-        }
-    };
-
-}

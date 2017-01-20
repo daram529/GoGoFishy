@@ -2,6 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.cs496.gogofishy">
 
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -12,10 +16,22 @@
             android:theme="@style/Theme.AppCompat.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <service android:name="com.cs496.gogofishy.service.SensorService">
+        </service>
+
+        <receiver android:name=".service.SensorService$NotificationReceiver">
+            <intent-filter>
+                <action android:name="S_CARE_ACTION"/>
+                <action android:name="P_CARE_ACTION"/>
+                <action android:name="A_CARE_ACTION"/>
+                <action android:name="L_CARE_ACTION"/>
+                <action android:name="IGNORE_ACTION"/>
+            </intent-filter>
+        </receiver>
 
         <receiver android:name="layout.FishyWidget">
             <intent-filter>
