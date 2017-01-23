@@ -4,6 +4,9 @@ import android.app.Application;
 import android.provider.Settings;
 import android.util.Log;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.Volley;
+
 import java.io.IOException;
 
 import pl.droidsonroids.gif.GifDrawable;

@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
         RelativeLayout bg = (RelativeLayout) findViewById(R.id.activity_main);
         GifDrawable oceangif = null;
         try {
-            oceangif = new GifDrawable(getAssets(), "beach.gif" );
+            oceangif = new GifDrawable(getAssets(), "rosing.gif" );
             bg.setBackground(oceangif);
         } catch (IOException e) {
             e.printStackTrace();
