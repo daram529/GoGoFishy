@@ -7,10 +7,12 @@ import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.os.BatteryManager;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
@@ -41,6 +43,10 @@ public class SensorService extends Service{
     static long[] disable_t = {0, 0, 0, 0};
     static boolean[] disable_b = {false, false, false, false};
 
+    boolean half_round = false;
+    int full_round=0;
+    long round_time = 0;
+
     @Override
     public void onDestroy() {
         Toast.makeText(this, "My Service Stopped", Toast.LENGTH_LONG).show();
@@ -67,11 +73,13 @@ public class SensorService extends Service{
         Sensor prox = sm.getDefaultSensor(Sensor.TYPE_PROXIMITY);
         Sensor light = sm.getDefaultSensor(Sensor.TYPE_LIGHT);
         Sensor step = sm.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
+        Sensor orien = sm.getDefaultSensor(Sensor.TYPE_ORIENTATION);
 
         sm.registerListener(sensorListener, light, 100000);
         sm.registerListener(sensorListener, prox, 100000);
         sm.registerListener(sensorListener, accel, SensorManager.SENSOR_DELAY_NORMAL);
         sm.registerListener(sensorListener, step, 100000);
+        sm.registerListener(sensorListener, orien, SensorManager.SENSOR_DELAY_FASTEST);
 
         nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         pendingIntent = PendingIntent.getActivity(getBaseContext(), 0, new Intent(getBaseContext(), MainActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
@@ -263,6 +271,38 @@ public class SensorService extends Service{
                         setDisable_b(3, false);
                     }
                 }
+            } else if (event.sensor.getType() == Sensor.TYPE_ORIENTATION){
+                float azimuth = event.values[0];
+                float pitch = event.values[1];
+                float roll = event.values[2];
+
+                if (pitch > 27){
+                    half_round = true;
+                }
+                if (pitch < -27){
+                    if (half_round && (System.currentTimeMillis() - round_time < 3000)){
+                        full_round +=1;
+                        half_round = false;
+                        round_time = System.currentTimeMillis();
+                    }
+                    else if (System.currentTimeMillis()- round_time > 3000){
+                        full_round = 0;
+                        round_time = System.currentTimeMillis();
+                    }
+                }
+
+
+                if (full_round > 3){
+                    Log.e("Orientation", "달래졌다!!!");
+                    full_round = 0;
+                }
+
+
+
+
+
+//                Log.e("Orientation", "달래기 성공");
+
             } else if (event.sensor.getType() == Sensor.TYPE_STEP_COUNTER){
                 Log.e("StepCounter", event.values[0]+"");
             }

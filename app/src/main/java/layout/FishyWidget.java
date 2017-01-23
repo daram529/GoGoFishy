@@ -3,6 +3,8 @@ package layout;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
+import android.net.Uri;
+import android.widget.RelativeLayout;
 import android.widget.RemoteViews;
 
 import com.cs496.gogofishy.R;
