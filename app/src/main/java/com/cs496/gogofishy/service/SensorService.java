@@ -137,7 +137,7 @@ public class SensorService extends Service{
             if (decibel > 85){
                 if (!disable_b[0]){
                     Notification.Builder mBuilder = new Notification.Builder(getBaseContext());
-                    mBuilder.setSmallIcon(R.drawable.ic_shark);
+                    mBuilder.setSmallIcon(R.drawable.noti_rose);
                     mBuilder.setTicker("Notification.Builder");
                     mBuilder.setContentTitle("시끄러워!!!!!");
                     mBuilder.setContentText("시끄러워서 잠을 잘 수가 없어!!");
@@ -158,8 +158,8 @@ public class SensorService extends Service{
                     ignoreReceive.setAction("IGNORE_ACTION");
                     PendingIntent pendingIgnore = PendingIntent.getBroadcast(getBaseContext(), 12345, ignoreReceive, PendingIntent.FLAG_UPDATE_CURRENT);
 
-                    mBuilder.addAction(R.drawable.ic_shark,"달래주기",pendingCare);
-                    mBuilder.addAction(R.drawable.ic_shark,"무시하기",pendingIgnore);
+                    mBuilder.addAction(R.drawable.flower,"달래주기",pendingCare);
+                    mBuilder.addAction(R.drawable.pick_flower,"무시하기",pendingIgnore);
 
                     nm.notify(99, mBuilder.build());
                 } else {
@@ -172,7 +172,7 @@ public class SensorService extends Service{
                     Log.i("too close", "aha");
 
                     Notification.Builder mBuilder = new Notification.Builder(getBaseContext());
-                    mBuilder.setSmallIcon(R.drawable.ic_shark);
+                    mBuilder.setSmallIcon(R.drawable.noti_rose);
                     mBuilder.setTicker("Notification.Builder");
                     mBuilder.setContentTitle("저리 치워!!!!!");
                     mBuilder.setContentText("내 눈 앞에서 치우란말야!!");
@@ -193,8 +193,8 @@ public class SensorService extends Service{
                     ignoreReceive.setAction("IGNORE_ACTION");
                     PendingIntent pendingIgnore = PendingIntent.getBroadcast(getBaseContext(), 12345, ignoreReceive, PendingIntent.FLAG_UPDATE_CURRENT);
 
-                    mBuilder.addAction(R.drawable.ic_shark, "달래주기", pendingCare);
-                    mBuilder.addAction(R.drawable.ic_shark, "무시하기", pendingIgnore);
+                    mBuilder.addAction(R.drawable.flower, "달래주기", pendingCare);
+                    mBuilder.addAction(R.drawable.pick_flower, "무시하기", pendingIgnore);
 
                     nm.notify(100, mBuilder.build());
                 } else{
@@ -217,7 +217,7 @@ public class SensorService extends Service{
                     if (speed > SHAKE_THRESHOLD) {
                         Log.d("motion", "shake gesture");
                         Notification.Builder mBuilder = new Notification.Builder(getBaseContext());
-                        mBuilder.setSmallIcon(R.drawable.ic_shark);
+                        mBuilder.setSmallIcon(R.drawable.noti_rose);
                         mBuilder.setTicker("Notification.Builder");
                         mBuilder.setContentTitle("흔들지 말란 말야!");
                         mBuilder.setContentText("너무 어지러워 ㅠㅠ");
@@ -238,8 +238,8 @@ public class SensorService extends Service{
                         ignoreReceive.setAction("IGNORE_ACTION");
                         PendingIntent pendingIgnore = PendingIntent.getBroadcast(getBaseContext(), 12345, ignoreReceive, PendingIntent.FLAG_UPDATE_CURRENT);
 
-                        mBuilder.addAction(R.drawable.ic_shark,"달래주기",pendingCare);
-                        mBuilder.addAction(R.drawable.ic_shark,"무시하기",pendingIgnore);
+                        mBuilder.addAction(R.drawable.flower,"달래주기",pendingCare);
+                        mBuilder.addAction(R.drawable.pick_flower,"무시하기",pendingIgnore);
 
                         nm.notify(101, mBuilder.build());
                     }
@@ -256,7 +256,7 @@ public class SensorService extends Service{
             } else if (event.sensor.getType() == Sensor.TYPE_LIGHT){
                 if (event.values[0] < 60 && !disable_b[3]){
                     Notification.Builder mBuilder = new Notification.Builder(getBaseContext());
-                    mBuilder.setSmallIcon(R.drawable.ic_shark);
+                    mBuilder.setSmallIcon(R.drawable.noti_rose);
                     mBuilder.setTicker("Notification.Builder");
                     mBuilder.setContentTitle("깜깜한건 싫어!!!");
                     mBuilder.setContentText("앞이 안보여 무섭단 말이에요 ㅠㅠ");
@@ -277,8 +277,8 @@ public class SensorService extends Service{
                     ignoreReceive.setAction("IGNORE_ACTION");
                     PendingIntent pendingIgnore = PendingIntent.getBroadcast(getBaseContext(), 12345, ignoreReceive, PendingIntent.FLAG_UPDATE_CURRENT);
 
-                    mBuilder.addAction(R.drawable.ic_shark,"달래주기",pendingCare);
-                    mBuilder.addAction(R.drawable.ic_shark,"무시하기",pendingIgnore);
+                    mBuilder.addAction(R.drawable.flower,"달래주기",pendingCare);
+                    mBuilder.addAction(R.drawable.pick_flower,"무시하기",pendingIgnore);
 
                     nm.notify(102, mBuilder.build());
                 } else {
