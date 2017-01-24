@@ -1,16 +1,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#09C"
-    android:padding="@dimen/widget_margin">
+    android:background="@drawable/rose_splash">
 
 
-    <pl.droidsonroids.gif.GifImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/rose"
-        android:src="@drawable/rose"
-        android:scaleType="centerCrop" />
 
     <!--
     <TextView

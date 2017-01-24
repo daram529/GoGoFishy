@@ -176,9 +176,9 @@ public class FishyWidget extends AppWidgetProvider {
 //        views.setTextViewText(R.id.appwidget_text, widgetText);
         views.setOnClickPendingIntent(R.id.button, getPendingSelfIntent(context, BUTTON_CLICKED));
 
-//        float opacity = 0.3f;           //opacity = 0: fully transparent, opacity = 1: no transparancy
-//        int backgroundColor = 0x000000;
-//        views.setInt(R.layout.fishy_widget, "setBackgroundColor", (int)(opacity * 0xFF) << 24 | backgroundColor);
+        float opacity = 0.3f;           //opacity = 0: fully transparent, opacity = 1: no transparancy
+        int backgroundColor = 0x000000;
+        views.setInt(R.drawable.rose, "setBackgroundColor", (int)(opacity * 0xFF) << 24 | backgroundColor);
 
         appWidgetManager.updateAppWidget(widget, views);
     }
