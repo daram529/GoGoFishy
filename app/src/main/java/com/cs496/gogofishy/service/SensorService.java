@@ -19,6 +19,7 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.cs496.gogofishy.App;
 import com.cs496.gogofishy.MainActivity;
 import com.cs496.gogofishy.R;
 import com.cs496.gogofishy.SoundMeter;
@@ -49,7 +50,7 @@ public class SensorService extends Service{
 
     @Override
     public void onDestroy() {
-        Toast.makeText(this, "My Service Stopped", Toast.LENGTH_LONG).show();
+//        Toast.makeText(this, "My Service Stopped", Toast.LENGTH_LONG).show();
         Log.d(TAG, "onDestroy");
         super.onDestroy();
 //        thread.stopForever();
@@ -59,14 +60,14 @@ public class SensorService extends Service{
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.d(TAG, "onStartCommand");
-        Toast.makeText(this, "My Service onStartCommand", Toast.LENGTH_LONG).show();
+//        Toast.makeText(this, "My Service onStartCommand", Toast.LENGTH_LONG).show();
         return START_STICKY;
     }
 
     @Override
     public void onCreate(){
         Log.d(TAG, "onCreate");
-        Toast.makeText(this, "My Service Created", Toast.LENGTH_LONG).show();
+//        Toast.makeText(this, "My Service Created", Toast.LENGTH_LONG).show();
 
         sm = (SensorManager)getSystemService(SENSOR_SERVICE);
         Sensor accel = sm.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
@@ -89,12 +90,20 @@ public class SensorService extends Service{
 
         try {
             mSensor.start();
-            Toast.makeText(getBaseContext(), "Sound sensor initiated.", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(getBaseContext(), "Sound sensor initiated.", Toast.LENGTH_SHORT).show();
         } catch (IllegalStateException e){
             e.printStackTrace();
         }catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void soundStart() {
+        App.disable_sound = false;
+    }
+
+    public void soundStop(){
+        App.disable_sound = true;
     }
 
     @Nullable
@@ -115,11 +124,18 @@ public class SensorService extends Service{
         @Override
         public void onSensorChanged(SensorEvent event) {
 //            Log.e("disable_b", disable_b[0]+" , "+disable_b[1]+" , "+disable_b[2]+" , "+disable_b[3]);
+            if (App.disable_sound)
+                mSensor.stop();
+            else {
+                try {
+                    mSensor.start();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
             double decibel = mSensor.getDecibel();
             if (decibel > 85){
                 if (!disable_b[0]){
-                    Log.i(TAG, "too loud (decibel over 85)");
-
                     Notification.Builder mBuilder = new Notification.Builder(getBaseContext());
                     mBuilder.setSmallIcon(R.drawable.ic_shark);
                     mBuilder.setTicker("Notification.Builder");
@@ -200,7 +216,6 @@ public class SensorService extends Service{
 
                     if (speed > SHAKE_THRESHOLD) {
                         Log.d("motion", "shake gesture");
-
                         Notification.Builder mBuilder = new Notification.Builder(getBaseContext());
                         mBuilder.setSmallIcon(R.drawable.ic_shark);
                         mBuilder.setTicker("Notification.Builder");
@@ -239,7 +254,7 @@ public class SensorService extends Service{
                     }
                 }
             } else if (event.sensor.getType() == Sensor.TYPE_LIGHT){
-                if (event.values[0] < 100 && !disable_b[3]){
+                if (event.values[0] < 60 && !disable_b[3]){
                     Notification.Builder mBuilder = new Notification.Builder(getBaseContext());
                     mBuilder.setSmallIcon(R.drawable.ic_shark);
                     mBuilder.setTicker("Notification.Builder");
@@ -290,19 +305,21 @@ public class SensorService extends Service{
                         round_time = System.currentTimeMillis();
                     }
                 }
-
-
                 if (full_round > 3){
                     Log.e("Orientation", "달래졌다!!!");
+                    setDisable_b(0, true);
+                    setDisable_b(1, true);
+                    setDisable_b(2, true);
+                    setDisable_b(3, true);
+                    setDisable_t(0, System.currentTimeMillis());
+                    setDisable_t(1, System.currentTimeMillis());
+                    setDisable_t(2, System.currentTimeMillis());
+                    setDisable_t(3, System.currentTimeMillis());
                     full_round = 0;
+                    NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                    nm.cancelAll();
+                    Toast.makeText(getBaseContext(), "장미가 기분이 좋아졌습니다.", Toast.LENGTH_SHORT).show();
                 }
-
-
-
-
-
-//                Log.e("Orientation", "달래기 성공");
-
             } else if (event.sensor.getType() == Sensor.TYPE_STEP_COUNTER){
                 Log.e("StepCounter", event.values[0]+"");
             }
@@ -318,12 +335,11 @@ public class SensorService extends Service{
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
             Integer num = intent.getIntExtra("notifyID", 0);
-            Log.e("num", num+"");
             NotificationManager nm = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
             SensorService ss = new SensorService();
             if ("CARE_ACTION".equals(action)) {
                 Log.e(TAG, "CARE CALLED");
-                Toast.makeText(context, "CARE CALLED", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(context, "CARE CALLED", Toast.LENGTH_SHORT).show();
                 nm.cancel(num);
             } else if ("S_CARE_ACTION".equals(action)) {
                 nm.cancel(num);
@@ -343,7 +359,7 @@ public class SensorService extends Service{
                 ss.setDisable_t(3, System.currentTimeMillis());
             } else if ("IGNORE_ACTION".equals(action)) {
                 Log.e(TAG, "IGNORE CALLED");
-                Toast.makeText(context, "IGNORE CALLED", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(context, "IGNORE CALLED", Toast.LENGTH_SHORT).show();
                 nm.cancelAll();
             }
         }

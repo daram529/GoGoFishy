@@ -45,7 +45,6 @@ public class sendToServer {
             String res;
 
             try {
-                Log.e("im here", "at server");
                 URL url = new URL(urlstr);
                 conn = (HttpURLConnection) url.openConnection();
                 conn.setDoInput(true);

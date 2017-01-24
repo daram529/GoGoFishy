@@ -18,6 +18,8 @@ import pl.droidsonroids.gif.GifImageView;
 
 public class App extends Application {
 
+    public static boolean disable_sound = false;
+
     @Override
     public void onCreate() {
         super.onCreate();
